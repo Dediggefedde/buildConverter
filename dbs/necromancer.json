@@ -1,0 +1,136 @@
+{  
+    "skills":{  
+        "Consume Conditions":[  
+            "0xA2",
+            "0x00"
+        ],
+        "\"You Are All Weaklings!\"":[  
+            "0xF1",
+            "0x12"
+        ],
+        "\"Suffer!\"":[  
+            "0xA6",
+            "0x12"
+        ],
+        "\"Nothing Can Save You!\"":[  
+            "0xEB",
+            "0x12"
+        ],
+        "Plaguelands":[  
+            "0x92",
+            "0x00"
+        ],
+        "\"Your Soul Is Mine!\"":[  
+            "0xC1",
+            "0x12"
+        ],
+        "\"Rise!\"":[  
+            "0x0F",
+            "0x13"
+        ],
+        "Corrosive Poison Cloud":[  
+            "0x8B",
+            "0x00"
+        ],
+        "Epidemic":[  
+            "0x99",
+            "0x01"
+        ],
+        "Summon Flesh Golem":[  
+            "0x95",
+            "0x00"
+        ],
+        "Summon Blood Fiend":[  
+            "0x9B",
+            "0x00"
+        ],
+        "Corrupt Boon":[  
+            "0x30",
+            "0x01"
+        ],
+        "Blood Is Power":[  
+            "0x80",
+            "0x00"
+        ],
+        "Spectral Armor":[  
+            "0xFA",
+            "0x00"
+        ],
+        "Lich Form":[  
+            "0x7A",
+            "0x01"
+        ],
+        "Well of Blood":[  
+            "0x12",
+            "0x00"
+        ],
+        "Spectral Grasp":[  
+            "0x77",
+            "0x01"
+        ],
+        "Spectral Wall":[  
+            "0x6C",
+            "0x01"
+        ],
+        "Spectral Walk":[  
+            "0xBD",
+            "0x01"
+        ],
+        "\"Chilled to the Bone!\"":[  
+            "0x03",
+            "0x13"
+        ],
+        "Signet of Vampirism":[  
+            "0x28",
+            "0x0F"
+        ],
+        "Signet of Spite":[  
+            "0x75",
+            "0x01"
+        ],
+        "Signet of the Locust":[  
+            "0x76",
+            "0x01"
+        ],
+        "Plague Signet":[  
+            "0xF5",
+            "0x00"
+        ],
+        "Signet of Undeath":[  
+            "0x6F",
+            "0x01"
+        ],
+        "Summon Bone Minions":[  
+            "0xE4",
+            "0x00"
+        ],
+        "Summon Bone Fiend":[  
+            "0x76",
+            "0x00"
+        ],
+        "Summon Shadow Fiend":[  
+            "0x70",
+            "0x01"
+        ],
+        "Summon Flesh Wurm":[  
+            "0x2E",
+            "0x01"
+        ],
+        "Well of Suffering":[  
+            "0x81",
+            "0x00"
+        ],
+        "Well of Corruption":[  
+            "0x73",
+            "0x01"
+        ],
+        "Well of Power":[  
+            "0x74",
+            "0x01"
+        ],
+        "Well of Darkness":[  
+            "0x40",
+            "0x01"
+        ]
+    }
+}

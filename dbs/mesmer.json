@@ -1,0 +1,133 @@
+{  
+   "skills": 
+      {  
+         "Well of Eternity":[  
+            "0xF0",
+            "0x12"
+         ],
+         "Well of Precognition":[  
+            "0x93",
+            "0x12"
+         ],
+         "Well of Calamity":[  
+            "0x04",
+            "0x13"
+         ],
+         "Well of Recall":[  
+            "0x87",
+            "0x12"
+         ],
+         "Signet of Humility":[  
+            "0xED",
+            "0x12"
+         ],
+         "Ether Fest":[  
+            "0x6E",
+            "0x01"
+         ],
+         "Well of Action":[  
+            "0xCF",
+            "0x12"
+         ],
+         "Null Field":[  
+            "0x6A",
+            "0x01"
+         ],
+         "Feedback":[  
+            "0x7F",
+            "0x01"
+         ],
+         "Time Wrap":[  
+            "0xBC",
+            "0x01"
+         ],
+         "Mirror":[  
+            "0x0F",
+            "0x01"
+         ],
+         "Portal Entre":[  
+            "0x64",
+            "0x01"
+         ],
+         "Veil":[  
+            "0x1A",
+            "0x01"
+         ],
+         "Decoy":[  
+            "0x66",
+            "0x01"
+         ],
+         "Mass Invisibility":[  
+            "0x9A",
+            "0x01"
+         ],
+         "Mantra of Recovery":[  
+            "0x6D",
+            "0x01"
+         ],
+         "Mirror Images":[  
+            "0x6B",
+            "0x01"
+         ],
+         "Phantasmal Defender":[  
+            "0x86",
+            "0x01"
+         ],
+         "Phantasmal Disenchanter":[  
+            "0x8F",
+            "0x01"
+         ],
+         "Gravity Well":[  
+            "0xB3",
+            "0x12"
+         ],
+         "Signet of the Ether":[  
+            "0x23",
+            "0x0F"
+         ],
+         "Blink":[  
+            "0x65",
+            "0x01"
+         ],
+         "Arcane Thievery":[  
+            "0x18",
+            "0x01"
+         ],
+         "Illusion of Life":[  
+            "0x84",
+            "0x01"
+         ],
+         "Mimic":[  
+            "0xB6",
+            "0x01"
+         ],
+         "Mantra of Pain":[  
+            "0x69",
+            "0x01"
+         ],
+         "Mantra of Distraction":[  
+            "0x67",
+            "0x01"
+         ],
+         "Mantra of Resolve":[  
+            "0x68",
+            "0x01"
+         ],
+         "Mantra of Concentration":[  
+            "0x85",
+            "0x01"
+         ],
+         "Signet of Inspiration":[  
+            "0x80",
+            "0x01"
+         ],
+         "Signet of Domination":[  
+            "0x81",
+            "0x01"
+         ],
+         "Signet of Midnight":[  
+            "0x83",
+            "0x01"
+         ] 
+    }
+}

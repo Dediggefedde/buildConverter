@@ -1,0 +1,137 @@
+{  
+   "skills": 
+      {  
+         "Glyph of Rejuvenation":[  
+            "0x09",
+            "0x13"
+         ],
+         "Glyph of Alignment":[  
+            "0xD5",
+            "0x12"
+         ],
+         "Glyph of Equality":[  
+            "0xE6",
+            "0x12"
+         ],
+         "Glyph of Empowerment":[  
+            "0xB8",
+            "0x12"
+         ],
+         "\"Strength of the Pack!\"":[  
+            "0xED",
+            "0x00"
+         ],
+         "\"We Heal As One!\"":[  
+            "0x79",
+            "0x00"
+         ],
+         "Glyph of the Tides":[  
+            "0xA8",
+            "0x12"
+         ],
+         "\"Sic 'Em!\"":[  
+            "0xA5",
+            "0x01"
+         ],
+         "\"Protect Me!\"":[  
+            "0xBB",
+            "0x00"
+         ],
+         "Entangle":[  
+            "0xC0",
+            "0x00"
+         ],
+         "Troll Unguent":[  
+            "0x78",
+            "0x00"
+         ],
+         "\"Guard!\"":[  
+            "0xB7",
+            "0x00"
+         ],
+         "\"Search and Rescue!\"":[  
+            "0xB4",
+            "0x00"
+         ],
+         "Sun Spirit":[  
+            "0xBD",
+            "0x00"
+         ],
+         "Spirit of Nature":[  
+            "0x97",
+            "0x01"
+         ],
+         "Healing Spring":[  
+            "0xA1",
+            "0x00"
+         ],
+         "Stone Spirit":[  
+            "0xB9",
+            "0x00"
+         ],
+         "Frost Spirit":[  
+            "0xBC",
+            "0x00"
+         ],
+         "Storm Spirit":[  
+            "0xB6",
+            "0x00"
+         ],
+         "Glypf of Unity":[  
+            "0xB4",
+            "0x12"
+         ],
+         "Water Spirit":[  
+            "0x25",
+            "0x0F"
+         ],
+         "Sharpening Stone":[  
+            "0xBF",
+            "0x00"
+         ],
+         "Lightning Reflexes":[  
+            "0xB8",
+            "0x00"
+         ],
+         "Muddy Terrain":[  
+            "0xC1",
+            "0x00"
+         ],
+         "Quickening Zephyr":[  
+            "0x96",
+            "0x01"
+         ],
+         "Signet of Renewal":[  
+            "0xC2",
+            "0x00"
+         ],
+         "Signet of the Hunt":[  
+            "0x9A",
+            "0x00"
+         ],
+         "Signet of Stone":[  
+            "0xAB",
+            "0x01"
+         ],
+         "Signet of the Wild":[  
+            "0xAC",
+            "0x01"
+         ],
+         "Spike Trap":[  
+            "0x1B",
+            "0x00"
+         ],
+         "Flame Trap":[  
+            "0xBE",
+            "0x00"
+         ],
+         "Viper's Nest":[  
+            "0xBA",
+            "0x00"
+         ],
+         "Frost Trap":[  
+            "0xB5",
+            "0x00"
+         ]
+    }
+}
