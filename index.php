@@ -361,6 +361,11 @@ try{
 			  </div>
 			</div>
 		</div>
+		<script type="text/javascript">
+			document.getElementById("traits_btn").addEventListener("click", function() {
+	    		copyToClipboard(document.getElementById("traits_text"));
+			});
+		</script>
 	<?php endif ?>
 	<?php if (isset($skillCode)): ?>
 		<div class="col-sm-12 col-md-6">
@@ -379,6 +384,11 @@ try{
 			  </div>
 			</div>
 		</div>
+		<script type="text/javascript">
+			document.getElementById("skills_btn").addEventListener("click", function() {
+    			copyToClipboard(document.getElementById("skills_text"));
+			});
+		</script>
 		<?php endif ?>
 		</div>             
 	</div>
@@ -390,12 +400,6 @@ try{
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
 
 	<script type="text/javascript">
-		document.getElementById("skills_btn").addEventListener("click", function() {
-    		copyToClipboard(document.getElementById("skills_text"));
-		});
-		document.getElementById("traits_btn").addEventListener("click", function() {
-    		copyToClipboard(document.getElementById("traits_text"));
-		});
     	function copyToClipboard(elem) {
 	  // create hidden text element, if it doesn't already exist
 	    var targetId = "_hiddenCopyText_";
