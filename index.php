@@ -3,146 +3,15 @@
 $errors = [];
 
 function getDB($profession){
-	$GW2SKILLS_RAW_URL_PROFESSION = "http://en.gw2skills.net/ajax/editorSkillListFull/?p=";
-	$db = [];
-	$content = file_get_contents($GW2SKILLS_RAW_URL_PROFESSION.$profession);
-
-	if(preg_match_all('|(\d+);[^;]*;[^;]*;[^;]*;[^;]*;[^;]*;[^;]*;[^;]*;[^;]*;[^;]*;[^;]*;[^;]*;[^;]*;[^;]*;[^;]*;[^;]*;[^;]*;([^;]*);[^\n]*\n|',
-	 $content, $matches)){
-		foreach ($matches[1] as $key => $match) {
-			$db["skills"][$match] = $matches[2][$key];
-		}
-	} 
-
-	if(preg_match_all('|(\d+)\|(\d+)\|([XM]\d)\|[^\|]*\|([^\|]*)\|[^\n]*\n|', $content, $matches)){
-		foreach ($matches[1] as $key => $match) {
-			$db["traits"][$match] = array("branch" => $matches[2][$key], "position" => $matches[3][$key], "name" => $matches[4][$key]);
-		}
-	}
+	$db = json_decode(file_get_contents('./dbs/db_'.$profession.'.json'), true);
 
 	return $db;
 }
 
-function findTraits($traitsId, $allTraits){
-	$traits = [];
+function getProfessions(){
+	$professions = json_decode(file_get_contents('./dbs/professions.json'), true)["professions"];
 
-	foreach ($traitsId as $key => $trait) {
-		for($i=1;$i<sizeof($trait);$i++){
-			$traits [] = $allTraits[$trait[$i]];
-		}
-	}
-	
-	return $traits;
-}
-
-
-function getApiSkills($profession){
-	$PROFESSION_URL = "https://api.guildwars2.com/v2/professions?lang=en&ids=";
-	$SKILL_URL = "https://api.guildwars2.com/v2/skills?lang=en&ids=";
-
-	$professionSkills = [];
-	$json = json_decode(file_get_contents($PROFESSION_URL.ucfirst($profession)), true);
-
-	foreach ($json[0]["skills"] as $skill) {
-		$professionSkills[] = $skill["id"];
-	}
-
-	$apiSkills = [];
-	$json = json_decode(file_get_contents($SKILL_URL.implode(',', $professionSkills)), true);
-
-	foreach ($json as $key => $skill) {
-		$apiSkills[$skill["name"]] = $skill["id"];
-	}
-
-	return $apiSkills;
-}
-
-function getApiTraits($profession){
-	$PROFESSION_URL = "https://api.guildwars2.com/v2/professions?lang=en&ids=";
-	$TRAIT_URL = "https://api.guildwars2.com/v2/traits?lang=en&ids=";
-
-	$professionTraits = [];
-	$apiTraits = [];
-
-	$json = json_decode(file_get_contents($PROFESSION_URL.ucfirst($profession)), true);
-	$traitsIdsToSearch = [];
-	foreach ($json[0]["training"] as $key => $training) {
-		if(in_array($training["category"], ["Specializations", "EliteSpecializations"])){
-			$traitLinesName[$training["id"]]["name"] = $training["name"];
-			foreach ($training["track"] as $keyTrait => $value) {
-				if($value["type"] === "Trait"){
-					$traitsIdsToSearch[$value["trait_id"]] = $training["name"];
-				}
-			}
-		}
-	}
-
-	$json = json_decode(file_get_contents($TRAIT_URL.implode(',', array_keys($traitsIdsToSearch))), true);
-	foreach ($json as $key => $trait) {
-		$apiTraits["line"][$traitsIdsToSearch[$trait["id"]]]["id"] = $trait["specialization"];
-		$apiTraits["line"][$traitsIdsToSearch[$trait["id"]]]["traits"][$trait["id"]] = $trait["name"];
-	}
-
-	return $apiTraits;
-}
-
-function hexToGameCode($hex){
-  $return = '';
-  foreach(explode(" ", $hex) as $pair){
-    $return .= chr(hexdec(str_replace('0x', '', $pair)));
-  }
-  return base64_encode($return);
-}
-
-function getSkillTemplateCode($profession, $skills){
-	$PROFESSIONS_TEMPLATE = [
-		"guardian" 	   => "0x01",
-		"warrior" 	   => "0x02",
-		"engineer"	   => "0x03",
-		"ranger"	   => "0x04",
-		"thief"		   => "0x05",
-		"elementalist" => "0x06",
-		"mesmer"	   => "0x07",
-		"necromancer"  => "0x08",
-		"revenant"     => "0x09",
-	];
-
-	if ($profession === "revenant"){
-		return "";
-	}
-
-	$db = json_decode(file_get_contents("./dbs/".$profession.".json"), true);
-	$hexArray = [];
-
-	$hexArray[0] = "0x73";
-	$hexArray[1] = $PROFESSIONS_TEMPLATE[$profession];
-	$hexArray[2] = "0x00";
-	$index = 3;
-
-	ksort($skills);
-
-	foreach ($skills as $key => $skill) {
-		if(!empty($db['skills'][$skill["name"]])){
-
-			$hexArray[$index] 	= $db['skills'][$skill["name"]][0];
-			$hexArray[$index+1] = $db['skills'][$skill["name"]][1];
-		}else{
-			$hexArray[$index] = 0x00;
-			$hexArray[$index+1] = 0x00;
-		}
-		$index += 2;
-	}
-	/*
-	while($index <= 22){
-		$hexArray[$index] = 0x00;
-		$index++;
-	}
-	*/
-	$templateCode = hexToGameCode(implode(' ', $hexArray));
-
-	$templateCode = '[*'.$templateCode.']';
-
-	return $templateCode;
+	return $professions;
 }
 
 function hexArrayFromId($id){
@@ -158,56 +27,92 @@ function hexArrayFromId($id){
 	return $result;
 }
 
-function getTraitTemplateCode($profession, $traits, $apiTraits){
-	$PROFESSIONS_TEMPLATE = [
-		"guardian" 	   => "0x01",
-		"warrior" 	   => "0x02",
-		"engineer"	   => "0x03",
-		"ranger"	   => "0x04",
-		"thief"		   => "0x05", 
-		"elementalist" => "0x06",
-		"mesmer"	   => "0x07",
-		"necromancer"  => "0x08",
-		"revenant"     => "0x09",
-	];
-	$traitlines = json_decode(file_get_contents('./dbs/trait_lines.json'), true)["traitsLines"];
-	
+function hexToGameCode($hex){
+  $return = '';
+  foreach(explode(" ", $hex) as $pair){
+    $return .= chr(hexdec(str_replace('0x', '', $pair)));
+  }
+  return base64_encode($return);
+}
+
+function getSkillTemplateCode($info, $db, &$errors = []){
 	$hexArray = [];
+
+	if ($info["profession"] === "revenant"){
+		$errors[] = ["warning", "Revenant doesn't have utility skills and the legends don't work yet."];
+		return "";
+	}
+	if(empty($info["skills"])){
+		$errors[] = ["warning", "Revenant doesn't have utility skills and the legends don't work yet."];
+		return "";
+	}
+
+	$hexArray[0] = "0x73";
+	$hexArray[1] = $db["profession"]["InternalID"];
+	$hexArray[2] = "0x00";
+	$index = 3;
+
+	foreach ($info["skills"] as $key => $skill) {
+		if(!empty($db['skills'][$skill] && isset($db['skills'][$skill]["InternalID"]))){
+			$hexArray[$index] 	= $db['skills'][$skill]["InternalID"][0];
+			$hexArray[$index+1] = $db['skills'][$skill]["InternalID"][1];
+		}elseif (!empty($db['skills'][$skill] && !isset($db['skills'][$skill]["InternalID"]))) {
+			$errors[] = ["error", "The skill \"".$skill."\" is not mapped to game code yet. We will try to add it as soon as posible."];
+			$hexArray[$index] 	= 0x00;
+			$hexArray[$index+1] = 0x00;
+		}
+		else{
+			$hexArray[$index] 	= 0x00;
+			$hexArray[$index+1] = 0x00;
+		}
+		$index += 2;
+	}
+
+	$templateCode = hexToGameCode(implode(' ', $hexArray));
+
+	$templateCode = '[*'.$templateCode.']';
+
+	return $templateCode;
+}
+
+function getTraitTemplateCode($info, $db, &$errors = []){
 	$traitFinalLine = [];
 
-	foreach ($traits as $key => $trait) {
-
-		if(array_search($traitlines[$profession][$trait["branch"]][0], array_column($traitFinalLine, 'name')) === false){
-			if($traitlines[$profession][$trait["branch"]][1] === true)
-			{
-				$traitFinalLine[2] = ["name" => $traitlines[$profession][$trait["branch"]][0], "fakeBranch" => $trait["branch"]];
-			}else {
-				array_unshift($traitFinalLine, ["name" => $traitlines[$profession][$trait["branch"]][0], "fakeBranch" => $trait["branch"]]);
-			}
-		}
-		
+	if(empty($info["traits"])){
+		$erros[] = ["warning", "This link doesn't have traits."];
+		return "";
 	}
 
-	foreach ($traitFinalLine as $key => $value) {
-		foreach ($traits as $trait) {
-			if($trait["branch"] === $value["fakeBranch"]){
-				$traitFinalLine[$key]["line_id"] = $apiTraits["line"][$value["name"]]["id"];
-				$traitFinalLine[$key]["traits"][] = array_search($trait["name"], $apiTraits["line"][$value["name"]]["traits"]);
+	foreach ($info["traitLines"] as $key => $traitLine) {
+		if(isset($db["traitsLines"][$traitLine])){
+			$traits = [];
+
+			foreach ($info["traits"] as $traitName => $trait) {
+				if(isset($db["traitsLines"][$traitLine]["traits"][$trait])){
+					$traits[] = hexArrayFromId($db["traitsLines"][$traitLine]["traits"][$trait]["Gw2OfficialId"]);
+				}
 			}
+
+			if($db["traitsLines"][$traitLine]["isElite"]){
+				$traitFinalLine[2] = ["line_id" => $db["traitsLines"][$traitLine]["Gw2OfficialId"], "traits" => $traits];
+			}else{
+				array_unshift($traitFinalLine, ["line_id" => $db["traitsLines"][$traitLine]["Gw2OfficialId"], "traits" => $traits]);
+			} 
+
 		}
 	}
 
+	$hexArray = [];
 	$hexArray[0] = "0x74";
-	$hexArray[1] = $PROFESSIONS_TEMPLATE[$profession];
+	$hexArray[1] =  $db["profession"]["InternalID"];
 	$hexArray[2] = "0x00";
 	for($i = 0; $i<=2; $i++){
 		$hexArray[3+($i*2)] = sprintf("0x%02x", $traitFinalLine[$i]["line_id"]);
 		$hexArray[4+($i*2)] = sprintf("0x%02x", 0);
 		for($j = 0; $j<=2; $j++){
 			$id = $traitFinalLine[$i]["traits"][$j];
-			$hexTrait = hexArrayFromId( $traitFinalLine[$i]["traits"][$j]);
-			$hexArray[9+($j*2)+($i*6)] = $hexTrait[0];
-			$hexArray[10+($j*2)+($i*6)] = $hexTrait[1];
+			$hexArray[9+($j*2)+($i*6)] = $traitFinalLine[$i]["traits"][$j][0];
+			$hexArray[10+($j*2)+($i*6)] = $traitFinalLine[$i]["traits"][$j][1];
 		}
 	}
 
@@ -220,112 +125,124 @@ function getTraitTemplateCode($profession, $traits, $apiTraits){
 	return $templateCode;
 }
 
-//MAIN
-try{
-	if(isset($_POST["gw2SkillsUrl"])){
-		$PROFESSIONS = [
-			1 => "elementalist",
-			2 => "warrior",
-			3 => "ranger",
-			4 => "necromancer",
-			5 => "guardian",
-			6 => "thief",
-			7 => "engineer",
-			8 => "mesmer",
-			9 => "revenant",
-		];
+function gw2SkillsNetSkills($db, $htmlContent){
+	$skills = [];
 
-		$url = $_POST["gw2SkillsUrl"];
-		
-		$htmlContent = file_get_contents($url);
-		$skills = [];
-		$traits = [];
-		
-		if(!preg_match('|gw2skills.net/editor|', $url)){
-			$errors[] = ["error", "This link is not form <a href='http://en.gw2skills.net/editor/'>gw2Skills.net</a>."];
+	if(preg_match_all('|preload\[\'s\'\]\[(\d+)\] ?= ?([^;]*)|', $htmlContent, $matches)){
+		foreach ($matches[1] as $key => $match) {
+			if(isset($db["skills"][$matches[2][$key]])){
+				$skills[$match] = $db["skills"][$matches[2][$key]];
+			}
 		}
-		elseif(preg_match('|preload\[\'p\'\] ?= ?(\d+)|', $htmlContent, $matches)){
-			$profession = $matches[1];
-			$traitlines = json_decode(file_get_contents('./dbs/trait_lines.json'));
-			$db = getDB($PROFESSIONS[$profession]);
-
-			if(preg_match_all('|preload\[\'s\'\]\[(\d+)\] ?= ?([^;]*)|', $htmlContent, $matches)){
-				foreach ($matches[1] as $key => $match) {
-					$skills[$match]["name"] = $db["skills"][$matches[2][$key]];
-				}
-			}
-
-			if(preg_match_all('|preload\[\'t\'\]\[(\d+)\] ?= ?\[([^;]*)\]|', $htmlContent, $matches)){
-				foreach ($matches[1] as $key => $match) {
-					$traits[$match] = explode(',',trim($matches[2][$key]));
-				}
-				$traits = findTraits($traits, $db["traits"]);	
-			}
-			
-			$apiSkills = getApiSkills($PROFESSIONS[$profession]);
-			foreach ($skills as $key => $skill) {
-				$skills[$key]["OfficialId"] = $apiSkills[$skill["name"]];
-			}
-			$apiTraits = getApiTraits($PROFESSIONS[$profession]);
-
-			if($PROFESSIONS[$profession] === "revenant"){
-				$skillCode = "";
-				$errors[] =  ["warning", "Skills for Revenant don't work yet."];
-			}elseif(empty($skills)){
-				$skillCode = "";
-				$errors[] =  ["warning", "There are not skills in this link."];
-			}
-			else{
-				$skillCode = getSkillTemplateCode($PROFESSIONS[$profession], $skills);
-			}
-
-			if(empty($traits)){
-				$traitCode = "";
-				$errors[] =  ["warning", "There are not traits in this link."];
-			}
-			else{
-				$traitCode = getTraitTemplateCode($PROFESSIONS[$profession], $traits, $apiTraits);
-			}
-			
-		
-		}else{
-			$errors[] = ["error", "Looks like that this link doesn't has a profession. Please check again."];
-		}
-		
 	}
-}catch(Exception $e){
-	$errors[] = ["error", "Internal Server Error"];
+	ksort($skills);
+
+	return $skills;
 }
 
+function gw2SkillsNetTraits($db, $htmlContent){
+	$result = [];
+
+	if(preg_match_all('|preload\[\'t\'\]\[(\d+)\] ?= ?\[ ?\d+,([^;]*)\]|', $htmlContent, $matches)){
+		foreach ($matches[1] as $key => $match) {
+			foreach(explode(",",trim($matches[2][$key])) as $trait){
+				if(isset($db["traits"][$trait])){
+					$result["traits"][] = $db["traits"][$trait];
+				}
+			}
+			if(isset($db["traitLines"][$match])){
+				$result["traitLines"][] = $db["traitLines"][$match];
+			}
+		}
+	}
+
+	return $result;
+}
+
+function gw2SkillsNetParser($url, $professions, &$errors){
+	$htmlContent = file_get_contents($url);
+	$gw2SkillsNetDb = json_decode(file_get_contents("./dbs/gw2SkillsNet/database.json"), true);
+	$result = [];
+	if(preg_match('|preload\[\'p\'\] ?= ?(\d+)|', $htmlContent, $matches)){
+		if(isset($gw2SkillsNetDb["professions"][$matches[1]])){
+			
+			$result["profession"] = $gw2SkillsNetDb["professions"][$matches[1]];
+
+			$result["skills"] = gw2SkillsNetSkills($gw2SkillsNetDb, $htmlContent);
+
+			$result = array_merge($result, gw2SkillsNetTraits($gw2SkillsNetDb, $htmlContent));
+			
+		}else{
+			$errors[] = ["error", "Looks like that this link has a not implemented profession. We will try to add it ASAP."];
+		}
+
+	}else{
+		$errors[] = ["error", "Looks like that this link doesn't have a profession. Please check again."];
+	}
+
+	return $result;
+}
+
+//MAIN
+try{
+	echo "<pre>";
+
+	if(isset($_POST["gw2SkillsUrl"])){
+		$url = $_POST["gw2SkillsUrl"];
+		
+		if(!preg_match('|gw2skills.net/editor|', $url)){
+			$errors[] = ["error", "This link is not from <a href='http://en.gw2skills.net/editor/' rel=\"noopener\">gw2Skills.net</a>."];
+		}
+		else{
+			$professions = getProfessions();
+			$result = gw2SkillsNetParser($url, $professions, $errors);
+
+			if(isset($result["profession"]) && (isset($result["skills"]) || isset(result["traits"]))){
+				$db = json_decode(file_get_contents("./dbs/db_".$result["profession"].".json"), true);
+
+				$skillCode = getSkillTemplateCode($result, $db, $errors);
+
+				$traitCode = getTraitTemplateCode($result, $db, $errors);
+			}
+		}	
+			
+		
+	}
+
+
+	echo "</pre>";
+}catch(Exception $e){
+	$errors[] = ["error", "Internal Server Error."];
+} 
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" style="height: 100%;">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+    <link rel="stylesheet" href="./bootstrap/css/bootstrap.min.css">
     
     <!--<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     -->
     <link href="./css/style.css" rel="stylesheet" id="bootstrap-css">
     <title>GW2 Template Generator</title>
   </head>
-  <body id="body">
+  <body id="body" style="height: 100%;">
     <div class="container" style="margin-top: 8%;">
     <div class="row col-md-12">
 		<div class="col-md-12">     
 			<div class="row">
 				<div id="logo" class="text-center">
-					<h1>GW2 Template Generator</h1><p>From <a href="http://en.gw2skills.net/editor/">Gw2Skills.net</a> to GW2 <a href="https://www.deltaconnected.com/arcdps/">Arcdps build templates</a> add-on</p>
+					<h1>GW2 Template Generator</h1><p>From <a href="http://en.gw2skills.net/editor/"  rel="noopener">Gw2Skills.net</a> to GW2 <a href="https://www.deltaconnected.com/arcdps/" rel="noopener">Arcdps build templates</a> add-on</p>
 				</div>
 				<div class="col-md-12">
 					<form role="form" id="form-buscar" method="POST">
 						<div class="form-group">
 							<div class="input-group">
-								<input id="1" class="form-control col-md-12" type="url" name="gw2SkillsUrl" placeholder="Write Gw2Skills.net URL..." required/>
+								<input id="1" class="form-control col-md-12" type="url" name="gw2SkillsUrl" placeholder="Paste Gw2Skills.net URL..." required/>
 								<span class="input-group-btn">
 								<button class="btn btn-success" type="submit" style="cursor: pointer">
 								<i class="glyphicon glyphicon-search" aria-hidden="true"></i> Generate
@@ -395,61 +312,11 @@ try{
 <div style="text-align: right;position: fixed;z-index:99999999;bottom: 0; width: 100%;line-height: 10; height:30px; background:white;">
 </div>
 	
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
+    <script src="./bootstrap/js/jquery-3.2.1.slim.min.js"></script>
+    <script src="./bootstrap/js/popper.min.js"></script>
+    <script src="./bootstrap/js/bootstrap.min.js"></script>
 
-	<script type="text/javascript">
-    	function copyToClipboard(elem) {
-	  // create hidden text element, if it doesn't already exist
-	    var targetId = "_hiddenCopyText_";
-	    var isInput = elem.tagName === "INPUT" || elem.tagName === "TEXTAREA";
-	    var origSelectionStart, origSelectionEnd;
-	    if (isInput) {
-	        // can just use the original source element for the selection and copy
-	        target = elem;
-	        origSelectionStart = elem.selectionStart;
-	        origSelectionEnd = elem.selectionEnd;
-	    } else {
-	        // must use a temporary form element for the selection and copy
-	        target = document.getElementById(targetId);
-	        if (!target) {
-	            var target = document.createElement("textarea");
-	            target.style.position = "absolute";
-	            target.style.left = "-9999px";
-	            target.style.top = "0";
-	            target.id = targetId;
-	            document.body.appendChild(target);
-	        }
-	        target.textContent = elem.textContent;
-	    }
-	    // select the content
-	    var currentFocus = document.activeElement;
-	    target.focus();
-	    target.setSelectionRange(0, target.value.length);
-	    
-	    // copy the selection
-	    var succeed;
-	    try {
-	    	  succeed = document.execCommand("copy");
-	    } catch(e) {
-	        succeed = false;
-	    }
-	    // restore original focus
-	    if (currentFocus && typeof currentFocus.focus === "function") {
-	        currentFocus.focus();
-	    }
-	    
-	    if (isInput) {
-	        // restore prior selection
-	        elem.setSelectionRange(origSelectionStart, origSelectionEnd);
-	    } else {
-	        // clear temporary content
-	        target.textContent = "";
-	    }
-	    return succeed;
-	}
-  	</script>
+	<script type="text/javascript" src="./js/copyToClipboard.js"></script>
   </body>
   
 </html>

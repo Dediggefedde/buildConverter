@@ -1,0 +1,137 @@
+{  
+   "skills": 
+      {  
+         "Channeled Vigor":[  
+            "0x94",
+            "0x12"
+         ],
+         "Fist Flurry":[  
+            "0xB0",
+            "0x12"
+         ],
+         "Distracting Daggers":[  
+            "0x77",
+            "0x12"
+         ],
+         "Bandit's Defense":[  
+            "0xB6",
+            "0x12"
+         ],
+         "Thieves Guild":[  
+            "0x28",
+            "0x00"
+         ],
+         "Hide in Shadows":[  
+            "0x0C",
+            "0x01"
+         ],
+         "Impairing Daggers":[  
+            "0x29",
+            "0x13"
+         ],
+         "Shadowstep":[  
+            "0x58",
+            "0x00"
+         ],
+         "Blinding Powder":[  
+            "0x34",
+            "0x01"
+         ],
+         "Basilisk Venom":[  
+            "0x0E",
+            "0x01"
+         ],
+         "Withdraw":[  
+            "0x0A",
+            "0x01"
+         ],
+         "Smoke Screen":[  
+            "0x59",
+            "0x01"
+         ],
+         "Shadow Refuge":[  
+            "0xBB",
+            "0x01"
+         ],
+         "Scorpion Wire":[  
+            "0x89",
+            "0x00"
+         ],
+         "Dagger Storm":[  
+            "0x9F",
+            "0x01"
+         ],
+         "Skelk Venom":[  
+            "0x24",
+            "0x0F"
+         ],
+         "Roll for Initiative":[  
+            "0x19",
+            "0x01"
+         ],
+         "Haste":[  
+            "0x5B",
+            "0x01"
+         ],
+         "Caltrops":[  
+            "0x0D",
+            "0x01"
+         ],
+         "Impact Strike":[  
+            "0xEE",
+            "0x12"
+         ],
+         "Signet of Malice":[  
+            "0x85",
+            "0x00"
+         ],
+         "Assassin's Signet":[  
+            "0x33",
+            "0x01"
+         ],
+         "Infiltrator's Signet":[  
+            "0x58",
+            "0x01"
+         ],
+         "Signet of Agility":[  
+            "0x57",
+            "0x01"
+         ],
+         "Signet of Shadows":[  
+            "0x56",
+            "0x01"
+         ],
+         "Tripwire":[  
+            "0x54",
+            "0x01"
+         ],
+         "Needle Trap":[  
+            "0x0B",
+            "0x01"
+         ],
+         "Shadow Trap":[  
+            "0x1B",
+            "0x01"
+         ],
+         "Ambush":[  
+            "0x53",
+            "0x01"
+         ],
+         "Spider Venom":[  
+            "0x2F",
+            "0x01"
+         ],
+         "Skale Venom":[  
+            "0x3E",
+            "0x01"
+         ],
+         "Ice Drake Venom":[  
+            "0x5A",
+            "0x01"
+         ],
+         "Devourer Venom":[  
+            "0x55",
+            "0x01"
+         ]         
+    }
+}

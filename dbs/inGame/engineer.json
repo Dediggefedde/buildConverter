@@ -1,0 +1,137 @@
+{  
+   "skills": 
+      {  
+         "Medic Gyro":[  
+            "0xD9",
+            "0x12"
+         ],
+         "Bulwark Gyro":[  
+            "0x0E",
+            "0x13"
+         ],
+         "Purge Gyro":[  
+            "0xCC",
+            "0x12"
+         ],
+         "Blast Gyro Tag":[  
+            "0x27",
+            "0x13"
+         ],
+         "Supply Crate":[  
+            "0x89",
+            "0x01"
+         ],
+         "Elixir H":[  
+            "0x14",
+            "0x01"
+         ],
+         "Shredder Gyro":[  
+            "0xAE",
+            "0x12"
+         ],
+         "Utility Goggles":[  
+            "0x60",
+            "0x01"
+         ],
+         "Rocket Boots":[  
+            "0x8D",
+            "0x01"
+         ],
+         "Elixir X":[  
+            "0x12",
+            "0x01"
+         ],
+         "Med Kit":[  
+            "0x84",
+            "0x00"
+         ],
+         "Personal Battering Ram":[  
+            "0x88",
+            "0x00"
+         ],
+         "Slick Shoes":[  
+            "0x13",
+            "0x01"
+         ],
+         "Flamethrower":[  
+            "0x93",
+            "0x01"
+         ],
+         "Elite Mortar Kit":[  
+            "0xF9",
+            "0x12"
+         ],
+         "A.E.D.":[  
+            "0x2A",
+            "0x0F"
+         ],
+         "Elixir Gun":[  
+            "0x95",
+            "0x01"
+         ],
+         "Tool Kit":[  
+            "0x8A",
+            "0x01"
+         ],
+         "Throw Mine":[  
+            "0x26",
+            "0x01"
+         ],
+         "Sneak Gyro":[  
+            "0x83",
+            "0x12"
+         ],
+         "Healing Turret":[  
+            "0x28",
+            "0x01"
+         ],
+         "Elixir C":[  
+            "0x8C",
+            "0x01"
+         ],
+         "Elixir R":[  
+            "0x61",
+            "0x01"
+         ],
+         "Grenade Kit":[  
+            "0x86",
+            "0x00"
+         ],
+         "Bomb Kit":[  
+            "0x07",
+            "0x01"
+         ],
+         "Rocket Turret":[  
+            "0x8E",
+            "0x01"
+         ],
+         "Elixir B":[  
+            "0x01",
+            "0x01"
+         ],
+         "Elixir U":[  
+            "0x5F",
+            "0x01"
+         ],
+         "Elixir S":[  
+            "0x5E",
+            "0x01"
+         ],
+         "Rifle Turret":[  
+            "0xA3",
+            "0x00"
+         ],
+         "Flame Turret":[  
+            "0x22",
+            "0x01"
+         ],
+         "Net Turret":[  
+            "0x23",
+            "0x01"
+         ],
+         "Thumper Turret":[  
+            "0x24",
+            "0x01"
+         ]
+    }
+}

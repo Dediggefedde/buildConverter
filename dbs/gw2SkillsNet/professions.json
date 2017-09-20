@@ -1,0 +1,13 @@
+{  
+    "professions":{  
+        "1":"elementalist",
+        "2":"warrior",
+        "3":"ranger",
+        "4":"necromancer",
+        "5":"guardian",
+        "6":"thief",
+        "7":"engineer",
+        "8":"mesmer",
+        "9":"revenant"
+    }
+}

@@ -1,0 +1,40 @@
+{  
+    "professions":{  
+        "guardian":{  
+            "name": "guardian",
+            "InternalID":"0x01"
+        },
+        "warrior":{  
+            "name": "warrior",
+            "InternalID":"0x02"
+        },
+        "engineer":{  
+            "name": "engineer",
+            "InternalID":"0x03"
+        },
+        "ranger":{  
+            "name": "ranger",
+            "InternalID":"0x04"
+        },
+        "thief":{  
+            "name": "thief",
+            "InternalID":"0x05"
+        },
+        "elementalist":{  
+            "name": "elementalist",
+            "InternalID":"0x06"
+        },
+        "mesmer":{  
+            "name": "mesmer",
+            "InternalID":"0x07"
+        },
+        "necromancer":{  
+            "name": "necromancer",
+            "InternalID":"0x08"
+        },
+        "revenant":{  
+            "name": "revenant",
+            "InternalID":"0x09"
+        }
+    }
+}

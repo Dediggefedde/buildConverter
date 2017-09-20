@@ -1,0 +1,137 @@
+{
+ "skills": 
+  {
+   "Shelter":[
+    "0x03",
+    "0x01"
+   ],
+   "Smite Condition":[
+    "0x78",
+    "0x01"
+   ],
+   "Contemplation of Purity":[
+    "0x04",
+    "0x01"
+   ],      
+   "Judge's Intervention":[
+    "0x47",
+    "0x01"
+   ],
+   "\"Feel My Wrath!\"":[
+    "0x89",
+    "0x12"
+   ],
+   "Signet of Resolve":[
+    "0x38",
+    "0x01"
+   ],
+   "Merciful Intervention":[
+    "0xB9",
+    "0x01"
+   ],
+   "Wall of Reflection":[
+    "0xFF",
+    "0x00"
+   ],      
+   "Purging Flames":[
+    "0x4C",
+    "0x01"
+   ],
+   "Renewed Focus":[
+    "0x37",
+    "0x01"
+   ],
+   "\"Receive the Light!\"":[
+    "0x07",
+    "0x00"
+   ],
+   "Hallowed Ground":[
+    "0x4B",
+    "0x01"
+   ],
+   "Sanctuary":[
+    "0x01",
+    "0x00"
+   ],      
+   "\"Retreat!\"":[
+    "0x2D",
+    "0x01"
+   ],
+   "Signet of Courage":[
+    "0x71",
+    "0x12"
+   ],
+   "Litany of Wrath":[
+    "0x26",
+    "0x0F"
+   ],
+   "\"Save Yourselves!\"":[
+    "0x8A",
+    "0x00"
+   ],
+   "\"Stand Your Ground!\"":[
+    "0x36",
+    "0x01"
+   ],      
+   "\"Hold the Line!\"":[
+    "0x35",
+    "0x01"
+   ],
+   "Dragon's Maw":[
+    "0xB5",
+    "0x12"
+   ],
+   "Purification":[
+    "0xBC",
+    "0x12"
+   ],
+   "Bane Signet":[
+    "0xFE",
+    "0x00"
+   ],      
+   "Signet of Judgment":[
+    "0x46",
+    "0x01"
+   ],
+   "Signet of Wrath":[
+    "0x31",
+    "0x01"
+   ],
+   "Signet of Mercy":[
+    "0x32",
+    "0x01"
+   ],      
+   "Hammer of Wisdom":[
+    "0x00",
+    "0x01"
+   ],
+   "Sword of Justice":[
+    "0x48",
+    "0x01"
+   ],
+   "Bow of Truth":[
+    "0x49",
+    "0x01"
+   ],
+   "Shield of the Avenger":[
+    "0x4A",
+    "0x01"
+   ],
+   "Test of Faith":[
+    "0xFE",
+    "0x12"
+   ],      
+   "Fragments of Faith":[
+    "0x84",
+    "0x12"
+   ],
+   "Procession of Blades":[
+    "0x8A",
+    "0x12"
+   ],
+   "Light's Judgment":[
+    "0xFA",
+    "0x12"
+   ]
+  }
+}
