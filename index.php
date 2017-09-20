@@ -9,7 +9,7 @@ function getDB($profession){
 }
 
 function getProfessions(){
-	$professions = json_decode(file_get_contents('./dbs/professions.json'), true)["professions"];
+	$professions = json_decode(file_get_contents('./dbs/inGame/professions.json'), true)["professions"];
 
 	return $professions;
 }
