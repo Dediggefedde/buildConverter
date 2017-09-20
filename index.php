@@ -43,7 +43,7 @@ function getSkillTemplateCode($info, $db, &$errors = []){
 		return "";
 	}
 	if(empty($info["skills"])){
-		$errors[] = ["warning", "Revenant doesn't have utility skills and the legends don't work yet."];
+		$errors[] = ["warning", "This link doesn't have skills."];
 		return "";
 	}
 
