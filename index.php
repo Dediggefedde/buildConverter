@@ -42,32 +42,42 @@ function getSkillTemplateCode($info, $db, &$errors = []){
 		$errors[] = ["warning", "Revenant doesn't have utility skills and the legends don't work yet."];
 		return "";
 	}
-	if(empty($info["skills"])){
+	if(empty($info["skills"]) || !isset($info["skills"])){
 		$errors[] = ["warning", "This link doesn't have skills."];
 		return "";
 	}
 
-	$hexArray[0] = "0x73";
+	$hexArray[0] = "0x6B";
 	$hexArray[1] = $db["profession"]["InternalID"];
 	$hexArray[2] = "0x00";
 	$index = 3;
 
-	foreach ($info["skills"] as $key => $skill) {
-		if(!empty($db['skills'][$skill] && isset($db['skills'][$skill]["InternalID"]))){
-			$hexArray[$index] 	= $db['skills'][$skill]["InternalID"][0];
-			$hexArray[$index+1] = $db['skills'][$skill]["InternalID"][1];
-		}elseif (!empty($db['skills'][$skill] && !isset($db['skills'][$skill]["InternalID"]))) {
-			$errors[] = ["error", "The skill \"".$skill."\" is not mapped to game code yet. We will try to add it as soon as posible."];
+	for($i = 6; $i <= 10; $i++){
+		if(isset($info["skills"][$i]) &&
+		  isset($db['skills'][$info["skills"][$i]]) &&
+		  isset($db['skills'][$info["skills"][$i]]["GW2OfficialId"])){
+			$skillIds = hexArrayFromId($db['skills'][$info["skills"][$i]]["GW2OfficialId"]);
+			$hexArray[$index] 	= $skillIds[0];
+			$hexArray[$index+1] = $skillIds[1];
+		}else{
 			$hexArray[$index] 	= 0x00;
 			$hexArray[$index+1] = 0x00;
 		}
-		else{
-			$hexArray[$index] 	= 0x00;
-			$hexArray[$index+1] = 0x00;
-		}
-		$index += 2;
-	}
 
+		if(isset($info["underWaterSkills"][$i]) &&
+		  isset($db['skills'][$info["underWaterSkills"][$i]]) &&
+		  isset($db['skills'][$info["underWaterSkills"][$i]]["GW2OfficialId"])) {
+			$skillIds = hexArrayFromId($db['skills'][$info["underWaterSkills"][$i]]["GW2OfficialId"]);
+			$hexArray[$index+10] 	= $skillIds[0];
+			$hexArray[$index+11] = $skillIds[1];
+		}else{
+			$hexArray[$index+10] 	= 0x00;
+			$hexArray[$index+11] = 0x00;
+		}
+		$index+=2;
+	}
+	ksort($hexArray);
+	
 	$templateCode = hexToGameCode(implode(' ', $hexArray));
 
 	$templateCode = '[*'.$templateCode.']';
@@ -77,9 +87,8 @@ function getSkillTemplateCode($info, $db, &$errors = []){
 
 function getTraitTemplateCode($info, $db, &$errors = []){
 	$traitFinalLine = [];
-
-	if(empty($info["traits"])){
-		$erros[] = ["warning", "This link doesn't have traits."];
+	if(empty($info["traits"]) || !isset($info["traits"])){
+		$errors[] = ["warning", "This link doesn't have traits."];
 		return "";
 	}
 
@@ -125,6 +134,22 @@ function getTraitTemplateCode($info, $db, &$errors = []){
 	return $templateCode;
 }
 
+function gw2SkillsNetUnderWaterSkills($db, $htmlContent){
+	$underWaterSkills = [];
+
+	if(preg_match_all('|preload\[\'sa\'\]\[(\d+)\] ?= ?([^;]*)|', $htmlContent, $matches)){
+		foreach ($matches[1] as $key => $match) {
+			if(isset($db["skills"][$matches[2][$key]])){
+				$underWaterSkills[$match] = $db["skills"][$matches[2][$key]];
+			}
+		}
+	}
+	ksort($underWaterSkills);
+
+	return $underWaterSkills;
+}
+
+
 function gw2SkillsNetSkills($db, $htmlContent){
 	$skills = [];
 
@@ -169,6 +194,8 @@ function gw2SkillsNetParser($url, $professions, &$errors){
 			$result["profession"] = $gw2SkillsNetDb["professions"][$matches[1]];
 
 			$result["skills"] = gw2SkillsNetSkills($gw2SkillsNetDb, $htmlContent);
+
+			$result["underWaterSkills"] = gw2SkillsNetUnderWaterSkills($gw2SkillsNetDb, $htmlContent);
 
 			$result = array_merge($result, gw2SkillsNetTraits($gw2SkillsNetDb, $htmlContent));
 			
@@ -225,13 +252,11 @@ try{
     
     <link rel="stylesheet" href="./bootstrap/css/bootstrap.min.css">
     
-    <!--<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-    -->
     <link href="./css/style.css" rel="stylesheet" id="bootstrap-css">
     <title>GW2 Template Generator</title>
   </head>
   <body id="body" style="height: 100%;">
-    <div class="container" style="margin-top: 8%;">
+    <div class="container" style="margin-top: 8%; margin-bottom: 8%">
     <div class="row col-md-12">
 		<div class="col-md-12">     
 			<div class="row">
@@ -261,7 +286,7 @@ try{
 		</div>
 	</div>
 	<div class="row col-md-12">
-	<?php if (isset($traitCode)): ?>
+	<?php if (!empty($traitCode)): ?>
 		<div class="col-sm-12 col-md-6">
 			<div class="card">
 			  <div class="card-body">
@@ -284,7 +309,7 @@ try{
 			});
 		</script>
 	<?php endif ?>
-	<?php if (isset($skillCode)): ?>
+	<?php if (!empty($skillCode)): ?>
 		<div class="col-sm-12 col-md-6">
 			<div class="card">
 			  <div class="card-body">
@@ -306,11 +331,25 @@ try{
     			copyToClipboard(document.getElementById("skills_text"));
 			});
 		</script>
-		<?php endif ?>
-		</div>             
+	<?php endif ?>
+	</div> 
+	<?php if (!empty($skillCode) && !empty($traitCode)): ?>
+		<div class="row justify-content-center" style="margin-top: 10px">
+		    <div class="input-group col-6">
+		      <div id="both_text" style="display:none"><?php echo $skillCode.$traitCode; ?></div>
+	        <button class="btn btn-primary col-sm-12" type="button" id="both_btn" style="cursor:pointer">Copy Both!</button> 
+		    </div>		
+		</div>
+		<script type="text/javascript">
+			document.getElementById("both_btn").addEventListener("click", function() {
+    			copyToClipboard(document.getElementById("both_text"));
+			});
+		</script>
+	<?php endif ?>
+	</div>             
+
+	<div style="text-align: right;position: fixed;z-index:99999999;bottom: 0; width: 220px;line-height: 10; height:30px; background:white;  right: 0px">
 	</div>
-<div style="text-align: right;position: fixed;z-index:99999999;bottom: 0; width: 100%;line-height: 10; height:30px; background:white;">
-</div>
 	
     <script src="./bootstrap/js/jquery-3.2.1.slim.min.js"></script>
     <script src="./bootstrap/js/popper.min.js"></script>
