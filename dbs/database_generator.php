@@ -64,7 +64,7 @@ function getDB($profession){
 
 function getDbGw2SkillsNet(){
     $GW2SKILLS_RAW_URL_PROFESSION = "http://en.gw2skills.net/ajax/editorSkillListFull/?p=";
-    $GW2SKILLS_RAW_URL_TRAITS_LINES = "http://js.gw2skills.net/db/en.1505129352.js";
+    $GW2SKILLS_RAW_URL_TRAITS_LINES = "http://js.gw2skills.net/db/en.1548027013.js";
     $db = [];
     $professions = json_decode(file_get_contents("./gw2SkillsNet/professions.json"), true);
 
