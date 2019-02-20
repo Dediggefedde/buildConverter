@@ -1,19 +1,40 @@
 <?php
+/*
+	Main file (code, interface, template)
+	Public interface
+	Takes a link for gw2skills.net, parses used skills and traits and converts it to game-codes that can be parsed into arcdps buildTemplates.
+*/
 
+//array of text that are displayed at the website if not empty.
 $errors = [];
 
-function getDB($profession){
-	$db = json_decode(file_get_contents('./dbs/db_'.$profession.'.json'), true);
+//returns file content of the target. 
+function getContent($url){ 
+	//curl fallback for servers with limits for file_get_contents
+	$data=file_get_contents($url);
+	if($data==""){
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, $url);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		$data = curl_exec($ch);
+		curl_close($ch);
+	}
+	return $data;
+}
 
+//all skills and traits with ids of $profession in /dbs/ folder
+function getDB($profession){
+	$db = json_decode(getContent('./dbs/db_'.$profession.'.json'), true);
 	return $db;
 }
 
+//list of professions
 function getProfessions(){
-	$professions = json_decode(file_get_contents('./dbs/inGame/professions.json'), true)["professions"];
-
+	$professions = json_decode(getContent('./dbs/inGame/professions.json'), true)["professions"];
 	return $professions;
 }
 
+//skill/trait id convert to 32bit (2digits) hex-value, starting with 0x.
 function hexArrayFromId($id){
 	$hex = [];
 	$number = $id;
@@ -35,6 +56,7 @@ function hexToGameCode($hex){
   return base64_encode($return);
 }
 
+//takes object from gw2skills as $info, the trait/skill db as $db and creates the template code using hexToGameCode()
 function getSkillTemplateCode($info, $db, &$errors = []){
 	$hexArray = [];
 
@@ -85,13 +107,13 @@ function getSkillTemplateCode($info, $db, &$errors = []){
 	return $templateCode;
 }
 
+//takes object from gw2skills as $info, the trait/skill db as $db and creates the template code using hexToGameCode()
 function getTraitTemplateCode($info, $db, &$errors = []){
 	$traitFinalLine = [];
 	if(empty($info["traits"]) || !isset($info["traits"])){
 		$errors[] = ["warning", "This link doesn't have traits."];
 		return "";
 	}
-
 	foreach ($info["traitLines"] as $key => $traitLine) {
 		if(isset($db["traitsLines"][$traitLine])){
 			$traits = [];
@@ -134,6 +156,7 @@ function getTraitTemplateCode($info, $db, &$errors = []){
 	return $templateCode;
 }
 
+//scans gw2skills for pattern, cross reference with trait/skills db and create $db of underwater skills (id=>name)
 function gw2SkillsNetUnderWaterSkills($db, $htmlContent){
 	$underWaterSkills = [];
 
@@ -150,10 +173,11 @@ function gw2SkillsNetUnderWaterSkills($db, $htmlContent){
 }
 
 
+//scans gw2skills for pattern, cross reference with trait/skills db and create $db of skills (id=>name)
 function gw2SkillsNetSkills($db, $htmlContent){
 	$skills = [];
-
-	if(preg_match_all('|preload\[\'s\'\]\[(\d+)\] ?= ?([^;]*)|', $htmlContent, $matches)){
+	$erg=preg_match_all('|preload\[\'s\'\]\[(\d+)\] ?= ?([^;]*)|', $htmlContent, $matches);
+	if($erg){
 		foreach ($matches[1] as $key => $match) {
 			if(isset($db["skills"][$matches[2][$key]])){
 				$skills[$match] = $db["skills"][$matches[2][$key]];
@@ -161,10 +185,10 @@ function gw2SkillsNetSkills($db, $htmlContent){
 		}
 	}
 	ksort($skills);
-
 	return $skills;
 }
 
+//scans gw2skills for pattern, cross reference with trait/skills db and create $db of traits (id=>name)
 function gw2SkillsNetTraits($db, $htmlContent){
 	$result = [];
 
@@ -184,9 +208,11 @@ function gw2SkillsNetTraits($db, $htmlContent){
 	return $result;
 }
 
+//parses the gw2skills website to extract used traits, skills and underwater skills with their ids using trait/skills database of this profession.
+//nly works with up-to-dayte /idb/database_generator.php call
 function gw2SkillsNetParser($url, $professions, &$errors){
-	$htmlContent = file_get_contents($url);
-	$gw2SkillsNetDb = json_decode(file_get_contents("./dbs/gw2SkillsNet/database.json"), true);
+	$htmlContent = getContent($url);
+	$gw2SkillsNetDb = json_decode(getContent("./dbs/gw2SkillsNet/database.json"), true);
 	$result = [];
 	if(preg_match('|preload\[\'p\'\] ?= ?(\d+)|', $htmlContent, $matches)){
 		if(isset($gw2SkillsNetDb["professions"][$matches[1]])){
@@ -196,10 +222,9 @@ function gw2SkillsNetParser($url, $professions, &$errors){
 			$result["skills"] = gw2SkillsNetSkills($gw2SkillsNetDb, $htmlContent);
 
 			$result["underWaterSkills"] = gw2SkillsNetUnderWaterSkills($gw2SkillsNetDb, $htmlContent);
-
+ 
 			$result = array_merge($result, gw2SkillsNetTraits($gw2SkillsNetDb, $htmlContent));
-			
-		}else{
+		}else{ 
 			$errors[] = ["error", "Looks like that this link has a not implemented profession. We will try to add it ASAP."];
 		}
 
@@ -220,20 +245,20 @@ try{
 		if(!preg_match('|gw2skills.net/editor|', $url)){
 			$errors[] = ["error", "This link is not from <a href='http://en.gw2skills.net/editor/' rel=\"noopener\">gw2Skills.net</a>."];
 		}
-		else{
+		else{ 
+			$url=str_replace("://gw2skills","://en.gw2skills",$url); 
+			//.en seems neccessary now, since http://gw2skills.net will redirect you. Otherwise getContent() will fail. 
+		
 			$professions = getProfessions();
 			$result = gw2SkillsNetParser($url, $professions, $errors);
-
-			if(isset($result["profession"]) && (isset($result["skills"]) || isset(result["traits"]))){
-				$db = json_decode(file_get_contents("./dbs/db_".$result["profession"].".json"), true);
+			if(isset($result["profession"]) && (isset($result["skills"]) || isset($result["traits"]))){
+				$db = json_decode(getContent("./dbs/db_".$result["profession"].".json"), true);
 
 				$skillCode = getSkillTemplateCode($result, $db, $errors);
 
 				$traitCode = getTraitTemplateCode($result, $db, $errors);
 			}
-		}	
-			
-		
+		}			
 	}
 
 
@@ -241,6 +266,7 @@ try{
 }catch(Exception $e){
 	$errors[] = ["error", "Internal Server Error."];
 } 
+
 ?>
 
 <!DOCTYPE html>
